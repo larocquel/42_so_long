@@ -5,43 +5,70 @@
 #                                                     +:+ +:+         +:+      #
 #    By: leoaguia <leoaguia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/06/04 15:36:13 by leoaguia          #+#    #+#              #
-#    Updated: 2025/06/05 19:48:53 by leoaguia         ###   ########.fr        #
+#    Created: 2025/06/06 14:06:58 by leoaguia          #+#    #+#              #
+#    Updated: 2025/06/07 17:22:11 by leoaguia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# OUTPUT NAME
 NAME = so_long
 NAME_BONUS = so_long_bonus
-SRC = main.c map.c
-SRC_BONUS = main_bonus.c map_bonus.c
-OBJ = $(SRC:.c=.o)
-OBJ_BONUS = $(SRC_BONUS: .c=.o)
-CC = cc
-FLAGS = -Wall -Wextra -Werror
-MLX_FLAGS = -lmlx -lXext -lX11 -lm
-RM = rm -rf
-LIBFT_DIR = ./libft
-LIBFT = $(LIBFT_DIR)/libft.a
 
+# PATHS
+SRC_DIR = ./src
+INCLUDES = ./includes
+LIBFT_DIR = ./libft
+MLX_DIR = ./mlx
+
+# COMPILATION
+CC = cc
+C_FLAGS = -g -Wall -Wextra -Werror
+LIB_FLAGS = -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm
+
+# FILES
+SRC = $(SRC_DIR)/main.c
+
+# OBJECTS
+OBJ = $(SRC:.c=.o)
+LIBFT = $(LIBFT_DIR)/libft.a
+MLX = $(MLX_DIR)/libmlx_Linux.a
+
+# RULES
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(FLAGS) $(OBJ) $(LIBFT) -o $(NAME) $(MLX_FLAGS)
+$(NAME): $(MLX) $(OBJ) $(LIBFT)
+	$(CC) $(OBJ) $(C_FLAGS) $(LIB_FLAGS) -o $(NAME)
 
-bonus: $(OBJ_BONUS) $(LIBFT)
-	$(CC) $(FLAGS) $(OBJ_BONUS) $(LIBFT) -o $(NAME_BONUS) $(MLX_FLAGS)
+%.o : %.c
+	$(CC) $(C_FLAGS) -I $(INCLUDES) -c $^ -o $@
 
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR) --no-print-directory
+
+$(MLX):
+	if [ ! -d "$(MLX_DIR)" ]; then \
+		git clone https://github.com/42Paris/minilibx-linux.git $(MLX_DIR); \
+	fi
+	@$(MAKE) -C $(MLX_DIR)
 
 clean:
-	$(RM) $(OBJ) $(OBJ_BONUS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@rm -rf $(OBJ)
+	@make clean -C $(LIBFT_DIR) --no-print-directory
+	if [ -d "$(MLX_DIR)" ]; then \
+		make clean -C $(MLX_DIR) --no-print-directory; \
+	fi
+
+	@echo "Cleaning Objects!"
 
 fclean: clean
-	$(RM) $(NAME) $(NAME_BONUS)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@rm -rf $(NAME)
+	if [ -d "$(MLX_DIR)" ]; then \
+		rm -rf $(MLX_DIR); \
+	fi
+
+	@make fclean -C $(LIBFT_DIR) --no-print-directory
+	@echo "Cleaning Objects and executable"
 
 re: fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re
