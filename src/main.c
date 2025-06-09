@@ -6,7 +6,7 @@
 /*   By: leoaguia <leoaguia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:33:09 by leoaguia          #+#    #+#             */
-/*   Updated: 2025/06/07 17:33:34 by leoaguia         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:27:38 by leoaguia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,18 @@ int	main(void)
 	game.win = mlx_new_window(game.mlx, WIDTH, HEIGHT, "Hello, World!");
 	if (!game.win)
 		return (free(game.mlx), 1);
+
+	// Criar Imagem com Buffer
+	game.buffer.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+	game.buffer.addr = mlx_get_data_addr(game.buffer.img, &game.buffer.bits_per_pixel, &game.buffer.line_len, &game.buffer.endian);
+
+	// Carregar textura
+	game.texture.player.img = mlx_xpm_file_to_image(game.mlx, "textures/bonequinho.xpm", &game.texture.player.width, &game.texture.player.height);
+	game.texture.player.addr = mlx_get_data_addr(game.texture.player.img, &game.texture.player.bits_per_pixel, &game.texture.player.line_len, &game.texture.player.endian);
+	
+	// Loop Principal
+	mlx_loop_hook(game.mlx, game_loop, &game);
+
+	// Loop
 	mlx_loop(game.mlx);
 }

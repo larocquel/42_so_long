@@ -6,15 +6,15 @@
 /*   By: leoaguia <leoaguia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:35:52 by leoaguia          #+#    #+#             */
-/*   Updated: 2025/06/07 17:05:09 by leoaguia         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:43:37 by leoaguia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-# define WIDTH	500
-# define HEIGHT	500
+# define WIDTH	1280
+# define HEIGHT	720
 
 # include "../mlx/mlx.h"
 # include "../mlx/mlx_int.h"
@@ -34,37 +34,44 @@ typedef struct s_position
 
 typedef struct s_image
 {
-	void	*player;
-	void	*collectable;
-	void	*wall;
-	void	*floor;
-	void	*door_open;
-	void	*door_close;
-}	t_images;
+	void	*img;
+	void	*addr;
+	int		line_len;
+	int		bits_per_pixel;
+	int		endian;
+	int		width;
+	int		height;
+} t_image;
+
+typedef struct s_texture
+{
+	t_image	player;
+	t_image	collectable;
+	t_image	wall;
+	t_image	floor;
+	t_image	door_open;
+	t_image	door_close;
+}	t_texture;
 
 typedef struct s_game
 {
-	int			fd;
-	char		**map;
-	char		**map_copy;
-	int			map_height;
-	int			map_width;
-	int			players_c;
-	int			exit_c;
-	int			collectables_c;
-	int			reachable_c;
-	int			reachable_e;
-	bool		exit_access;
-	bool		start;
-	bool		door_open;
-	bool		exit_found;
-	int			moves_c;
-	t_position	player_pos;
-	t_position	exit_pos;
-	t_position	*collectable_pos;
 	void		*mlx;
 	void		*win;
-	t_images	img;
+	t_image		buffer;
+	t_texture	texture;
+
 }	t_game;
+
+/* ************************************************************************** */
+/*   PROTOTYPES                                                               */
+/* ************************************************************************** */
+
+// game_loop.c
+int		game_loop(t_game *game);
+void	update(t_game *game);
+
+// utils.c
+void	ft_pixelput(t_image *data, int x, int y, int color);
+void	draw_texture(t_image *buffer, t_image *texture, int x, int y, int scale);
 
 #endif
