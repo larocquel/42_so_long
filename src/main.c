@@ -6,7 +6,7 @@
 /*   By: leoaguia <leoaguia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 16:33:09 by leoaguia          #+#    #+#             */
-/*   Updated: 2025/06/09 18:27:38 by leoaguia         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:15:13 by leoaguia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,18 @@ int	main(void)
 	// Carregar textura
 	game.texture.player.img = mlx_xpm_file_to_image(game.mlx, "textures/bonequinho.xpm", &game.texture.player.width, &game.texture.player.height);
 	game.texture.player.addr = mlx_get_data_addr(game.texture.player.img, &game.texture.player.bits_per_pixel, &game.texture.player.line_len, &game.texture.player.endian);
-	
+
+	// Inicializa a posicao do player
+	game.player.pos.x = WIDTH / 2;
+	game.player.pos.y = HEIGHT / 2;
+	game.player.dir.x = 0;
+	game.player.dir.y = 0;
+
 	// Loop Principal
 	mlx_loop_hook(game.mlx, game_loop, &game);
+
+	// Key hook loop
+	mlx_key_hook(game.win, key_handler, &game);
 
 	// Loop
 	mlx_loop(game.mlx);

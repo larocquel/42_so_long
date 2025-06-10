@@ -6,11 +6,20 @@
 /*   By: leoaguia <leoaguia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:31:22 by leoaguia          #+#    #+#             */
-/*   Updated: 2025/06/09 22:43:21 by leoaguia         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:34:34 by leoaguia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/so_long.h"
+
+int	close_game(t_game *game)
+{
+	mlx_destroy_display(game->mlx);
+	mlx_destroy_window(game->mlx, game->win);
+	free(game->mlx);
+	ft_printf("Game Closed!\n");
+	return (0);
+}
 
 void	ft_pixelput(t_image *data, int x, int y, int color)
 {

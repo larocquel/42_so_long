@@ -6,7 +6,7 @@
 /*   By: leoaguia <leoaguia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:02:12 by leoaguia          #+#    #+#             */
-/*   Updated: 2025/06/09 22:43:48 by leoaguia         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:36:31 by leoaguia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,19 @@
 //Update: Mexe com toda logica antes de colocar as coisas na tela
 void	update(t_game *game)
 {
-	(void) game;
+	game->player.pos.x += game->player.dir.x * SPEED;
+	game->player.pos.y += game->player.dir.y * SPEED;
+
+	// Rebater as bordas da tela
+
+	if (game->player.pos.x < 0)
+		game->player.pos.x = 0;
+	if (game->player.pos.y < 0)
+		game->player.pos.y = 0;
+	if (game->player.pos.x >= WIDTH - (game->texture.player.width * SCALE))
+		game->player.pos.x = WIDTH - (game->texture.player.width * SCALE);
+	if (game->player.pos.y >= HEIGHT - (game->texture.player.height * SCALE))
+		game->player.pos.y = HEIGHT - (game->texture.player.height * SCALE);
 }
 
 // Render: Coloca as porra toda na tela
@@ -31,7 +43,7 @@ void	render(t_game *game)
 	}
 
 	// Coloca o player na tela
-	draw_texture(&game->buffer, &game->texture.player, WIDTH/2, HEIGHT/2, 5);
+	draw_texture(&game->buffer, &game->texture.player, game->player.pos.x, game->player.pos.y, SCALE);
 	mlx_put_image_to_window(game->mlx, game->win, game->buffer.img, 0, 0);
 	return ;
 }

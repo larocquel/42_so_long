@@ -6,7 +6,7 @@
 #    By: leoaguia <leoaguia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/06 14:06:58 by leoaguia          #+#    #+#              #
-#    Updated: 2025/06/09 18:33:38 by leoaguia         ###   ########.fr        #
+#    Updated: 2025/06/10 18:31:36 by leoaguia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ LIB_FLAGS = -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm
 # FILES
 SRC = $(SRC_DIR)/main.c \
 $(SRC_DIR)/game_loop.c \
-$(SRC_DIR)/utils.c 
+$(SRC_DIR)/utils.c \
+$(SRC_DIR)/input.c
 
 # OBJECTS
 OBJ = $(SRC:.c=.o)
